@@ -26,11 +26,39 @@ const App = () => {
 
   return (
     <div>
+      <DailyAnecdote anecdotes={anecdotes} selected={selected} points={points} />
+      <Button handleClick={handleVoteClick} text="vote" />
+      <Button handleClick={handleNextClick} text="next anecdote" />
+      <MostVotedAnecdote points={points} anecdotes={anecdotes} />
+    </div>
+  );
+};
+
+const DailyAnecdote = ({ anecdotes,selected, points }) => {
+  return (
+    <>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {points[selected]} votes</p>
-      <button onClick={handleVoteClick}>vote</button>
-      <button onClick={handleNextClick}>next anecdote</button>
-    </div>
+    </>
+  );
+};
+
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>{text}</button>
+);
+
+const MostVotedAnecdote = ({ points, anecdotes }) => {
+  const max = Math.max(...points);
+
+  const index = points.indexOf(max);
+
+  return (
+    <>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[index]}</p>
+      <p>has {max} votes</p>
+    </>
   );
 };
 
