@@ -29,7 +29,9 @@ const App = () => {
   );
 };
 
-const Button = ({handleClick, text}) => <button onClick={handleClick}>{text}</button>
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>{text}</button>
+);
 
 const Statistics = ({ good, neutral, bad }) => {
   if (good + neutral + bad === 0) {
@@ -43,18 +45,27 @@ const Statistics = ({ good, neutral, bad }) => {
   return (
     <>
       <h1>statistics</h1>
-      <StatisticLine text="good" value={good} />
-      <StatisticLine text="neutral" value={neutral} />
-      <StatisticLine text="bad" value={bad} />
-      <StatisticLine text="all" value={good + neutral + bad} />
-      <StatisticLine
-        text="average"
-        value={(good - bad) / (good + neutral + bad)}
-      />
-      <StatisticLine
-        text="positive"
-        value={(good * 100) / (good + neutral + bad)}
-      />
+      <table>
+        <tbody>
+          <StatisticLine text="good" value={good} />
+
+          <StatisticLine text="neutral" value={neutral} />
+
+          <StatisticLine text="bad" value={bad} />
+
+          <StatisticLine text="all" value={good + neutral + bad} />
+
+          <StatisticLine
+            text="average"
+            value={(good - bad) / (good + neutral + bad)}
+          />
+
+          <StatisticLine
+            text="positive"
+            value={(good * 100) / (good + neutral + bad)}
+          />
+        </tbody>
+      </table>
     </>
   );
 };
@@ -62,15 +73,17 @@ const Statistics = ({ good, neutral, bad }) => {
 const StatisticLine = ({ text, value }) => {
   if (text === "positive") {
     return (
-      <p>
-        {text} {value} %
-      </p>
+      <tr>
+        <td>{text}</td>
+        <td>{value} %</td>
+      </tr>
     );
   }
   return (
-    <p>
-      {text} {value}
-    </p>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   );
 };
 
