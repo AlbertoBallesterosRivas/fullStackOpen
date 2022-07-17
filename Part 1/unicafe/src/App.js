@@ -30,6 +30,14 @@ const App = () => {
 };
 
 const Statistics = ({good, neutral, bad}) => {
+  if(good + neutral + bad === 0) {
+    return(
+      <>
+      <h1>statistics</h1>
+      <p>No feedback given</p>
+      </>
+    )
+  }
   return (
     <>
       <h1>statistics</h1>
