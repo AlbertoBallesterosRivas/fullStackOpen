@@ -1,6 +1,6 @@
 const Header = ({ course }) => <h1>{course}</h1>;
 
-const Total = ({ sum }) => <p>Number of exercises {sum}</p>;
+const Total = ({ sum }) => <b>total of {sum} exercises</b>;
 
 const Part = ({ part }) => (
   <p>
@@ -10,7 +10,9 @@ const Part = ({ part }) => (
 
 const Content = ({ parts }) => (
   <>
-  {parts.map(part => <Part part={part} key={part.id} />)}
+    {parts.map((part) => (
+      <Part part={part} key={part.id} />
+    ))}
   </>
 );
 
@@ -34,17 +36,28 @@ const App = () => {
         exercises: 14,
         id: 3,
       },
+      {
+        name: "Redux",
+        exercises: 11,
+        id: 4,
+      },
     ],
   };
 
   return <Course course={course} />;
 };
 
-const Course = ({ course }) => (
-  <>
-    <Header course={course.name} />
-    <Content parts={course.parts}/>
-  </>
-);
+const Course = ({ course }) => {
+  let total = 0;
+  course.parts.map((part) => (total += part.exercises));
+
+  return (
+    <>
+      <Header course={course.name} />
+      <Content parts={course.parts} />
+      <Total sum={total} />
+    </>
+  );
+};
 
 export default App;
