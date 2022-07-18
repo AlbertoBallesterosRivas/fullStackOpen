@@ -48,8 +48,7 @@ const App = () => {
 };
 
 const Course = ({ course }) => {
-  let total = 0;
-  course.parts.map((part) => (total += part.exercises));
+  let total = course.parts.reduce((previousValue, currentObject) => previousValue + currentObject.exercises, 0);
 
   return (
     <>
