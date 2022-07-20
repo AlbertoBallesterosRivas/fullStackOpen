@@ -1,4 +1,4 @@
-const Countries = ({ countries, filter }) => {
+const Countries = ({ countries, filter, setFilter }) => {
   const filteredCountries = countries.filter((country) =>
     country.name.common.toLowerCase().includes(filter.toLowerCase())
   );
@@ -23,10 +23,20 @@ const Countries = ({ countries, filter }) => {
       </>
     );
   }
+
+  const handleClick = (event) => {
+    setFilter(event.target.getAttribute("country"));
+  };
+
   return (
     <ul>
       {filteredCountries.map((country) => (
-        <li key={country.name.common}>{country.name.common}</li>
+        <li key={country.name.common}>
+          <span>{country.name.common}</span>
+          <button country={country.name.common} onClick={handleClick}>
+            show
+          </button>
+        </li>
       ))}
     </ul>
   );
