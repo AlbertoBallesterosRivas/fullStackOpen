@@ -24,16 +24,31 @@ const App = () => {
     event.preventDefault();
 
     if (persons.find((person) => person.name === newName) !== undefined) {
-      return window.alert(`${newName} is already added to phonebook`);
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with new one?`
+        )
+      ) {
+        let id = persons.find((person) => person.name === newName).id;
+        const person = persons.find((n) => n.id === id);
+        const changedPerson = { ...person, number: newNumber };
+        communication.update(id, changedPerson).then((response) => {
+          setPersons(
+            persons.map((person) => (person.id !== id ? person : response.data))
+          );
+        });
+        setNewName("");
+        setNewNumber("");
+      }
+    } else {
+      const person = { name: newName, number: newNumber };
+
+      communication.create(person).then((response) => {
+        setPersons(persons.concat(response.data));
+        setNewName("");
+        setNewNumber("");
+      });
     }
-
-    const person = { name: newName, number: newNumber };
-
-    communication.create(person).then((response) => {
-      setPersons(persons.concat(response.data));
-      setNewName("");
-      setNewNumber("");
-    });
   };
 
   const handleNameChange = (event) => {
