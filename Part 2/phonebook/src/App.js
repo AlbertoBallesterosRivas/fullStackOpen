@@ -16,6 +16,7 @@ const App = () => {
     communication.getAll().then((response) => {
       console.log("promise fulfilled");
       setPersons(response.data);
+      console.log("personss", response.data);
     });
   }, []);
 
@@ -47,6 +48,16 @@ const App = () => {
     setFilter(event.target.value);
   };
 
+  const onClickDeleteHandle = (event) => {
+    communication
+      .deletePerson(event.target.getAttribute("value"))
+      .then((response) => {
+        setPersons(
+          persons.filter((n) => n.id != event.target.getAttribute("value"))
+        );
+      });
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -61,7 +72,11 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons persons={persons} filter={filter} />
+      <Persons
+        persons={persons}
+        filter={filter}
+        onClickDeleteHandle={onClickDeleteHandle}
+      />
     </div>
   );
 };
