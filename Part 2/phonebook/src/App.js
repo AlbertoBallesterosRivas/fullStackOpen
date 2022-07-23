@@ -4,19 +4,20 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import communication from "./components/Communication";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
     console.log("effect");
     communication.getAll().then((response) => {
       console.log("promise fulfilled");
       setPersons(response.data);
-      console.log("personss", response.data);
     });
   }, []);
 
@@ -36,9 +37,12 @@ const App = () => {
           setPersons(
             persons.map((person) => (person.id !== id ? person : response.data))
           );
+          
+          setNewName("");
+          setNewNumber("");
+          setSuccessMessage(`Updated ${newName}`)
         });
-        setNewName("");
-        setNewNumber("");
+        
       }
     } else {
       const person = { name: newName, number: newNumber };
@@ -47,6 +51,7 @@ const App = () => {
         setPersons(persons.concat(response.data));
         setNewName("");
         setNewNumber("");
+        setSuccessMessage(`Added ${newName}`)
       });
     }
   };
@@ -76,6 +81,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h3>Add a new</h3>
       <PersonForm
