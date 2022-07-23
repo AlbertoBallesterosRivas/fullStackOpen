@@ -12,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
   const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     console.log("effect");
@@ -33,26 +34,47 @@ const App = () => {
         let id = persons.find((person) => person.name === newName).id;
         const person = persons.find((n) => n.id === id);
         const changedPerson = { ...person, number: newNumber };
-        communication.update(id, changedPerson).then((response) => {
-          setPersons(
-            persons.map((person) => (person.id !== id ? person : response.data))
-          );
-          
-          setNewName("");
-          setNewNumber("");
-          setSuccessMessage(`Updated ${newName}`)
-        });
-        
+        communication
+          .update(id, changedPerson)
+          .then((response) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== id ? person : response.data
+              )
+            );
+
+            setNewName("");
+            setNewNumber("");
+            setSuccessMessage(`Updated ${newName}`);
+            setTimeout(() => {
+              setSuccessMessage(null);
+            }, 3000);
+          })
+          .catch((error) => {
+            setErrorMessage(
+              `Information of ${newName} has already been removed from server`
+            );
+          });
       }
     } else {
       const person = { name: newName, number: newNumber };
 
-      communication.create(person).then((response) => {
-        setPersons(persons.concat(response.data));
-        setNewName("");
-        setNewNumber("");
-        setSuccessMessage(`Added ${newName}`)
-      });
+      communication
+        .create(person)
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+          setSuccessMessage(`Added ${newName}`);
+          setTimeout(() => {
+            setSuccessMessage(null);
+          }, 3000);
+        })
+        .catch((error) => {
+          setErrorMessage(
+            `Information of ${newName} has already been removed from server`
+          );
+        });
     }
   };
 
@@ -81,7 +103,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage} />
+      <Notification
+        successMessage={successMessage}
+        errorMessage={errorMessage}
+      />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h3>Add a new</h3>
       <PersonForm
